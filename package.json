@@ -1,26 +1,82 @@
 {
   "name": "antigravity-proxy",
+  "publisher": "goodl",
   "displayName": "Antigravity Proxy",
   "description": "Easily fix connectivity issues for the Antigravity remote server. This extension ensures your remote coding tools can bypass server firewalls by securely routing Antigravity's traffic through your local computer or a designated server gateway.",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/placeholder/antigravity-proxy"
+  },
   "engines": {
-    "vscode": "^1.107.0"
+    "vscode": "^1.100.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "antigravity-proxy.helloWorld",
-        "title": "Hello World"
+        "command": "antigravity-proxy.setup",
+        "title": "Antigravity Proxy: Setup Proxy Redirection"
+      },
+      {
+        "command": "antigravity-proxy.rollback",
+        "title": "Antigravity Proxy: Rollback to Original"
+      },
+      {
+        "command": "antigravity-proxy.startTunnel",
+        "title": "Antigravity Proxy: Start Reverse Tunnel (Manual)"
+      },
+      {
+        "command": "antigravity-proxy.stopTunnel",
+        "title": "Antigravity Proxy: Stop Tunnel"
+      },
+      {
+        "command": "antigravity-proxy.tunnelStatus",
+        "title": "Antigravity Proxy: Show Tunnel Status"
+      },
+      {
+        "command": "antigravity-proxy.checkProxy",
+        "title": "Antigravity Proxy: Check Proxy Availability"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Antigravity Proxy",
+      "properties": {
+        "antigravity-proxy.enableLocalForwarding": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use local proxy via SSH tunnel (if false, use server's own proxy)"
+        },
+        "antigravity-proxy.localProxyPort": {
+          "type": "number",
+          "default": 7890,
+          "description": "Local proxy port (only used when enableLocalForwarding is true)"
+        },
+        "antigravity-proxy.remoteProxyHost": {
+          "type": "string",
+          "default": "127.0.0.1",
+          "description": "Proxy host on remote server (only used when enableLocalForwarding is false)"
+        },
+        "antigravity-proxy.remoteProxyPort": {
+          "type": "number",
+          "default": 7890,
+          "description": "Proxy port on remote server"
+        }
+      }
+    }
   },
   "scripts": {
-    "vscode:prepublish": "npm run package",
+    "build:package": "npm run package",
     "compile": "npm run check-types && npm run lint && node esbuild.js",
     "watch": "npm-run-all -p watch:*",
     "watch:esbuild": "node esbuild.js --watch",
@@ -34,7 +90,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.107.0",
+    "@types/vscode": "^1.100.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "typescript-eslint": "^8.48.1",
