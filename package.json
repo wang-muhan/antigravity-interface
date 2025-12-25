@@ -26,27 +26,27 @@
     "commands": [
       {
         "command": "antigravity-proxy.setup",
-        "title": "Antigravity Proxy: Setup Proxy Redirection"
+        "title": "Antigravity Proxy: Setup Remote Environment"
       },
       {
         "command": "antigravity-proxy.rollback",
-        "title": "Antigravity Proxy: Rollback to Original"
+        "title": "Antigravity Proxy: Rollback Remote Environment"
       },
       {
-        "command": "antigravity-proxy.startTunnel",
-        "title": "Antigravity Proxy: Start Reverse Tunnel (Manual)"
+        "command": "antigravity-proxy.enableForwarding",
+        "title": "Antigravity Proxy: Enable Port Forwarding"
       },
       {
-        "command": "antigravity-proxy.stopTunnel",
-        "title": "Antigravity Proxy: Stop Tunnel"
+        "command": "antigravity-proxy.disableForwarding",
+        "title": "Antigravity Proxy: Disable Port Forwarding"
       },
       {
         "command": "antigravity-proxy.tunnelStatus",
-        "title": "Antigravity Proxy: Show Tunnel Status"
+        "title": "Antigravity Proxy: Show Status"
       },
       {
         "command": "antigravity-proxy.checkProxy",
-        "title": "Antigravity Proxy: Check Proxy Availability"
+        "title": "Antigravity Proxy: Check Proxy"
       }
     ],
     "configuration": {
