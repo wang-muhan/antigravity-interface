@@ -263,13 +263,33 @@ function registerRemoteCommands(context: vscode.ExtensionContext, proxyHost: str
 		terminal.show();
 
 		const script = generateSetupScript(proxyHost, proxyPort, context.extensionPath);
-		for (const line of script.split('\n')) {
-			if (line.trim()) {
-				terminal.sendText(line);
-			}
-		}
 
-		vscode.window.showInformationMessage('Setup complete. Please reload window.');
+		// Write script to temp file and execute with bash -x for debugging
+		const scriptPath = '/tmp/antigravity_setup.sh';
+		const escapedScript = script.replace(/'/g, "'\\''");
+
+		// Create the script file
+		terminal.sendText(`cat > ${scriptPath} << 'ANTIGRAVITY_SCRIPT_EOF'`);
+		terminal.sendText(script);
+		terminal.sendText('ANTIGRAVITY_SCRIPT_EOF');
+
+		// Make it executable and run with debugging
+		terminal.sendText(`chmod +x ${scriptPath}`);
+		terminal.sendText(`echo ""`);
+		terminal.sendText(`echo "========================================"`);
+		terminal.sendText(`echo "Running setup script with debug output..."`);
+		terminal.sendText(`echo "========================================"`);
+		terminal.sendText(`echo ""`);
+		terminal.sendText(`bash -x ${scriptPath} 2>&1; EXIT_CODE=$?`);
+		terminal.sendText(`echo ""`);
+		terminal.sendText(`echo "========================================"`);
+		terminal.sendText(`echo "Script finished with exit code: $EXIT_CODE"`);
+		terminal.sendText(`echo "========================================"`);
+		terminal.sendText(`echo ""`);
+		terminal.sendText(`echo "Press Enter to close this terminal..."`);
+		terminal.sendText(`read`);
+
+		vscode.window.showInformationMessage('Setup script executed. Check terminal output for details. Please reload window after reviewing.');
 	});
 
 	const rollbackCommand = vscode.commands.registerCommand('antigravity-proxy.rollback', () => {
