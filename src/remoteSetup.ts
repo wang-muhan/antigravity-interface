@@ -108,7 +108,7 @@ cat <<EOF > "$TARGET_PATH"
 #!/bin/bash
 MGRAFTCP_PATH="$MGRAFTCP_SOURCE"
 REAL_BINARY="\\\$(dirname "\\\${BASH_SOURCE[0]}")/\\\$(basename "\\\${BASH_SOURCE[0]}").bak"
-exec "\\\$MGRAFTCP_PATH" --http_proxy "$PROXY_ADDR" "\\\$REAL_BINARY" "\\\$@"
+exec "\\\$MGRAFTCP_PATH" --socks5 "$PROXY_ADDR" "\\\$REAL_BINARY" "\\\$@"
 EOF
 
 chmod +x "$TARGET_PATH"
