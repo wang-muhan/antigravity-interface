@@ -24,6 +24,8 @@ npx -y @vscode/vsce package
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Build Complete! VSIX file is ready." -ForegroundColor Green
+    Write-Host "Installing extension..." -ForegroundColor Yellow
+    antigravity --install-extension antigravity-proxy-0.0.1.vsix
 } else {
     Write-Error "Packaging failed!"
 }
