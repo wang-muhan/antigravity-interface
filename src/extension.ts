@@ -5,7 +5,7 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import { exec } from 'child_process';
 import { promisify } from 'util';
-import { generateSetupScript, generateRollbackScript } from './remoteSetup';
+import { getSetupScript, getRollbackScript } from './scripts';
 
 const execAsync = promisify(exec);
 
@@ -14,7 +14,7 @@ let debugChannel: vscode.OutputChannel;
 function debug(message: string): void {
 	const timestamp = new Date().toISOString();
 	const location = isRunningLocally() ? '[LOCAL]' : '[REMOTE]';
-	debugChannel?.appendLine(`${timestamp} ${location} ${message}`);
+	debugChannel?.appendLine(`${timestamp} ${location} ${message} `);
 }
 
 function isRunningLocally(): boolean {
@@ -33,7 +33,7 @@ async function checkPortAvailable(host: string, port: number): Promise<boolean> 
 }
 
 const ANTIGRAVITY_FILENAME = 'config.antigravity';
-const INCLUDE_LINE = `Include ${ANTIGRAVITY_FILENAME}`;
+const INCLUDE_LINE = `Include ${ANTIGRAVITY_FILENAME} `;
 
 /**
  * Get path to SSH config directory based on platform
@@ -71,15 +71,15 @@ async function updateSSHConfigFile(remotePort: number, localPort: number, enable
 			// 1. Create/Update the config.antigravity file
 			const antiContent = [
 				'# Antigravity Interface Configuration',
-				`# Generated at: ${new Date().toISOString()}`,
+				`# Generated at: ${new Date().toISOString()} `,
 				'Match all',
-				`    RemoteForward ${remotePort} 127.0.0.1:${localPort}`,
+				`    RemoteForward ${remotePort} 127.0.0.1:${localPort} `,
 				'    ExitOnForwardFailure no',
 				'    VisualHostKey no',
 				'',
 			].join('\n');
 			await fs.writeFile(antiConfigPath, antiContent, 'utf-8');
-			debug(`Updated ${antiConfigPath}`);
+			debug(`Updated ${antiConfigPath} `);
 
 			// 2. Ensure Include line exists in main config
 			let mainContent = '';
@@ -89,9 +89,9 @@ async function updateSSHConfigFile(remotePort: number, localPort: number, enable
 
 			if (!mainContent.includes(INCLUDE_LINE)) {
 				// Prepend to the top for maximum compatibility
-				mainContent = `${INCLUDE_LINE}\n${mainContent}`;
+				mainContent = `${INCLUDE_LINE} \n${mainContent} `;
 				await fs.writeFile(mainConfigPath, mainContent, 'utf-8');
-				debug(`Added Include line to ${mainConfigPath}`);
+				debug(`Added Include line to ${mainConfigPath} `);
 			}
 		} else {
 			// 1. Remove Include line from main config
@@ -99,23 +99,23 @@ async function updateSSHConfigFile(remotePort: number, localPort: number, enable
 				let mainContent = await fs.readFile(mainConfigPath, 'utf-8');
 				if (mainContent.includes(INCLUDE_LINE)) {
 					// Simply remove the Include line (we're the only one who writes it)
-					mainContent = mainContent.replace(`${INCLUDE_LINE}\n`, '');
+					mainContent = mainContent.replace(`${INCLUDE_LINE} \n`, '');
 					mainContent = mainContent.replace(INCLUDE_LINE, ''); // fallback if no trailing newline
 					await fs.writeFile(mainConfigPath, mainContent, 'utf-8');
-					debug(`Removed Include line from ${mainConfigPath}`);
+					debug(`Removed Include line from ${mainConfigPath} `);
 				}
 			} catch (e) { /* ignore */ }
 
 			// 2. Delete the config.antigravity file
 			try {
 				await fs.unlink(antiConfigPath);
-				debug(`Deleted ${antiConfigPath}`);
+				debug(`Deleted ${antiConfigPath} `);
 			} catch (e) { /* ignore if already gone */ }
 		}
 
-		debug(`SSH config updated (enable=${enable})`);
+		debug(`SSH config updated(enable = ${enable})`);
 	} catch (error) {
-		debug(`SSH config update error: ${error}`);
+		debug(`SSH config update error: ${error} `);
 		throw error;
 	}
 }
@@ -138,17 +138,16 @@ async function getSSHConfigStatus(): Promise<{ enabled: boolean; port?: number }
 	}
 	return { enabled: false };
 }
-
 export function activate(context: vscode.ExtensionContext) {
 	debugChannel = vscode.window.createOutputChannel('Antigravity Debug');
 	context.subscriptions.push(debugChannel);
 
-	debug(`Activating... isLocal=${isRunningLocally()}`);
+	debug(`Activating...isLocal = ${isRunningLocally()} `);
 
 	if (isRunningLocally()) {
-		activateLocal(context).catch(err => debug(`activateLocal error: ${err}`));
+		activateLocal(context).catch(err => debug(`activateLocal error: ${err} `));
 	} else {
-		activateRemote(context).catch(err => debug(`activateRemote error: ${err}`));
+		activateRemote(context).catch(err => debug(`activateRemote error: ${err} `));
 	}
 }
 
@@ -158,7 +157,7 @@ async function activateLocal(context: vscode.ExtensionContext) {
 	const localPort = config.get<number>('localProxyPort', 7890);
 	const remotePort = config.get<number>('remoteProxyPort', 7890);
 
-	debug(`Config: enable=${enable}, localPort=${localPort}, remotePort=${remotePort}`);
+	debug(`Config: enable = ${enable}, localPort = ${localPort}, remotePort = ${remotePort} `);
 
 	// Auto-setup on activation
 	if (enable) {
@@ -203,7 +202,7 @@ async function activateLocal(context: vscode.ExtensionContext) {
 			const status = await getSSHConfigStatus();
 			vscode.window.showInformationMessage(
 				status.enabled
-					? `Forwarding configured on port: ${status.port}`
+					? `Forwarding configured on port: ${status.port} `
 					: 'SSH port forwarding is not configured'
 			);
 		})
@@ -217,16 +216,16 @@ async function activateRemote(context: vscode.ExtensionContext) {
 	const remotePort = config.get<number>('remoteProxyPort', 7890);
 
 	if (process.platform !== 'linux') {
-		debug(`Skipping setup: unsupported platform '${process.platform}' (only Linux is supported)`);
+		debug(`Skipping setup: unsupported platform '${process.platform}'(only Linux is supported)`);
 		return;
 	}
 
-	debug(`Remote Proxy: ${remoteHost}:${remotePort}`);
+	debug(`Remote Proxy: ${remoteHost}:${remotePort} `);
 
 	// Auto-run setup script
 	// Use extensionUri.fsPath for correct remote path resolution
 	const extensionPath = context.extensionUri.fsPath;
-	debug(`Extension path: ${extensionPath}`);
+	debug(`Extension path: ${extensionPath} `);
 	debug('Auto-running setup script...');
 	await runSetupScriptSilently(remoteHost, remotePort, extensionPath);
 
@@ -238,7 +237,7 @@ async function activateRemote(context: vscode.ExtensionContext) {
 				const cfg = vscode.workspace.getConfiguration('antigravity-interface');
 				const host = cfg.get<string>('remoteProxyHost', '127.0.0.1');
 				const port = cfg.get<number>('remoteProxyPort', 7890);
-				debug(`Config changed, re-running setup: ${host}:${port}`);
+				debug(`Config changed, re - running setup: ${host}:${port} `);
 				await runSetupScriptSilently(host, port, extensionPath);
 			}
 		})
@@ -246,18 +245,25 @@ async function activateRemote(context: vscode.ExtensionContext) {
 
 	// Remote commands
 	context.subscriptions.push(
-		vscode.commands.registerCommand('antigravity-interface.setup', () => {
+		vscode.commands.registerCommand('antigravity-interface.setup', async () => {
+			const tempScriptPath = '/tmp/antigravity-setup-proxy.sh';
+			// Use embedded script - no CRLF issues since JS strings use \n
+			const content = getSetupScript();
+			await fs.writeFile(tempScriptPath, content, { encoding: 'utf-8', mode: 0o755 });
+
 			const terminal = vscode.window.createTerminal('Antigravity Setup');
 			terminal.show();
-			const script = generateSetupScript(remoteHost, remotePort, extensionPath);
-			terminal.sendText(`cat > /tmp/ag_setup.sh << 'EOF'\n${script}\nEOF`);
-			terminal.sendText('bash /tmp/ag_setup.sh');
+			terminal.sendText(`PROXY_HOST = ${remoteHost} PROXY_PORT = ${remotePort} bash "${tempScriptPath}"`);
 		}),
 
-		vscode.commands.registerCommand('antigravity-interface.rollback', () => {
+		vscode.commands.registerCommand('antigravity-interface.rollback', async () => {
+			const tempScriptPath = '/tmp/antigravity-rollback.sh';
+			const content = getRollbackScript();
+			await fs.writeFile(tempScriptPath, content, { encoding: 'utf-8', mode: 0o755 });
+
 			const terminal = vscode.window.createTerminal('Antigravity Rollback');
 			terminal.show();
-			terminal.sendText(generateRollbackScript());
+			terminal.sendText(`bash "${tempScriptPath}"`);
 		}),
 
 		vscode.commands.registerCommand('antigravity-interface.checkProxy', async () => {
@@ -270,24 +276,26 @@ async function activateRemote(context: vscode.ExtensionContext) {
 /**
  * Run setup script silently in background (idempotent)
  */
-async function runSetupScriptSilently(proxyHost: string, proxyPort: number, extensionPath: string): Promise<void> {
-	const scriptPath = path.join(extensionPath, 'scripts', 'setup-proxy.sh');
+async function runSetupScriptSilently(proxyHost: string, proxyPort: number, _extensionPath: string): Promise<void> {
+	const tempScriptPath = '/tmp/antigravity-setup-proxy.sh';
 
 	try {
-		// Ensure script is executable
-		await execAsync(`chmod +x "${scriptPath}"`);
+		// Use embedded script - no CRLF issues since JS strings use \n
+		const content = getSetupScript();
+		await fs.writeFile(tempScriptPath, content, { encoding: 'utf-8', mode: 0o755 });
+		debug(`Embedded script written to ${tempScriptPath} `);
 
-		// Execute script directly with environment variables for proxy config
+		// Execute script
 		const env = {
 			...process.env,
 			PROXY_HOST: proxyHost,
 			PROXY_PORT: String(proxyPort)
 		};
 
-		const { stdout, stderr } = await execAsync(`bash "${scriptPath}" 2>&1`, { env });
+		const { stdout, stderr } = await execAsync(`bash "${tempScriptPath}" 2 >& 1`, { env });
 		const output = stdout || stderr || '';
 
-		debug(`Setup output: ${output}`);
+		debug(`Setup output: ${output} `);
 
 		if (output.includes('Already configured')) {
 			debug('Setup: Already configured');
@@ -304,9 +312,9 @@ async function runSetupScriptSilently(proxyHost: string, proxyPort: number, exte
 		}
 	} catch (error: unknown) {
 		const err = error as { message?: string; stdout?: string; stderr?: string };
-		debug(`Setup error: ${err.message || error}`);
-		if (err.stdout) { debug(`stdout: ${err.stdout}`); }
-		if (err.stderr) { debug(`stderr: ${err.stderr}`); }
+		debug(`Setup error: ${err.message || error} `);
+		if (err.stdout) { debug(`stdout: ${err.stdout} `); }
+		if (err.stderr) { debug(`stderr: ${err.stderr} `); }
 	}
 }
 
@@ -315,7 +323,7 @@ export async function deactivate() {
 		try {
 			await updateSSHConfigFile(0, 0, false);
 		} catch (e) {
-			debug(`Cleanup during deactivation failed: ${e}`);
+			debug(`Cleanup during deactivation failed: ${e} `);
 		}
 	}
 }
