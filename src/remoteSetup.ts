@@ -5,6 +5,9 @@ export function generateSetupScript(proxyHost: string, proxyPort: number, extens
     const scriptPath = path.join(extensionPath, 'scripts', 'setup-proxy.sh');
     let script = fs.readFileSync(scriptPath, 'utf-8');
 
+    // Normalize line endings to LF
+    script = script.replace(/\r\n/g, '\n');
+
     // Replace placeholders
     script = script.replace(/__PROXY_HOST__/g, proxyHost);
     script = script.replace(/__PROXY_PORT__/g, String(proxyPort));
@@ -13,7 +16,7 @@ export function generateSetupScript(proxyHost: string, proxyPort: number, extens
 }
 
 export function generateRollbackScript(): string {
-    return `#!/bin/bash
+    const script = `#!/bin/bash
 set -e
 BAK=$(find "$HOME/.antigravity-server" -path "*/extensions/antigravity/bin/*" -name "language_server_linux_*.bak" -type f 2>/dev/null | head -1)
 [ -z "$BAK" ] && echo "Nothing to rollback" && exit 0
@@ -22,4 +25,5 @@ TARGET="\${BAK%.bak}"
 mv "$BAK" "$TARGET"
 echo "Rollback complete"
 `;
+    return script.replace(/\r\n/g, '\n');
 }
