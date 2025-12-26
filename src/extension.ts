@@ -70,7 +70,7 @@ async function updateSSHConfigFile(remotePort: number, localPort: number, enable
 		if (enable) {
 			// 1. Create/Update the config.antigravity file
 			const antiContent = [
-				'# Antigravity Proxy Configuration',
+				'# Antigravity Interface Configuration',
 				`# Generated at: ${new Date().toISOString()}`,
 				'Match all',
 				`    RemoteForward ${remotePort} 127.0.0.1:${localPort}`,
@@ -153,7 +153,7 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 async function activateLocal(context: vscode.ExtensionContext) {
-	const config = vscode.workspace.getConfiguration('antigravity-proxy');
+	const config = vscode.workspace.getConfiguration('antigravity-interface');
 	const enable = config.get<boolean>('enableLocalForwarding', true);
 	const localPort = config.get<number>('localProxyPort', 7890);
 	const remotePort = config.get<number>('remoteProxyPort', 7890);
@@ -174,8 +174,8 @@ async function activateLocal(context: vscode.ExtensionContext) {
 	// Watch config changes
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(async (e: vscode.ConfigurationChangeEvent) => {
-			if (e.affectsConfiguration('antigravity-proxy')) {
-				const cfg = vscode.workspace.getConfiguration('antigravity-proxy');
+			if (e.affectsConfiguration('antigravity-interface')) {
+				const cfg = vscode.workspace.getConfiguration('antigravity-interface');
 				const lp = cfg.get<number>('localProxyPort', 7890);
 				const rp = cfg.get<number>('remoteProxyPort', 7890);
 				const enabled = cfg.get<boolean>('enableLocalForwarding', true);
@@ -186,20 +186,20 @@ async function activateLocal(context: vscode.ExtensionContext) {
 
 	// Commands
 	context.subscriptions.push(
-		vscode.commands.registerCommand('antigravity-proxy.enableForwarding', async () => {
-			const cfg = vscode.workspace.getConfiguration('antigravity-proxy');
+		vscode.commands.registerCommand('antigravity-interface.enableForwarding', async () => {
+			const cfg = vscode.workspace.getConfiguration('antigravity-interface');
 			const lp = cfg.get<number>('localProxyPort', 7890);
 			const rp = cfg.get<number>('remoteProxyPort', 7890);
 			await updateSSHConfigFile(rp, lp, true);
 			vscode.window.showInformationMessage('SSH port forwarding enabled');
 		}),
 
-		vscode.commands.registerCommand('antigravity-proxy.disableForwarding', async () => {
+		vscode.commands.registerCommand('antigravity-interface.disableForwarding', async () => {
 			await updateSSHConfigFile(0, 0, false);
 			vscode.window.showInformationMessage('SSH port forwarding disabled');
 		}),
 
-		vscode.commands.registerCommand('antigravity-proxy.tunnelStatus', async () => {
+		vscode.commands.registerCommand('antigravity-interface.tunnelStatus', async () => {
 			const status = await getSSHConfigStatus();
 			vscode.window.showInformationMessage(
 				status.enabled
@@ -211,7 +211,7 @@ async function activateLocal(context: vscode.ExtensionContext) {
 }
 
 async function activateRemote(context: vscode.ExtensionContext) {
-	const config = vscode.workspace.getConfiguration('antigravity-proxy');
+	const config = vscode.workspace.getConfiguration('antigravity-interface');
 	// Remote only cares about remoteProxyHost and remoteProxyPort
 	const remoteHost = config.get<string>('remoteProxyHost', '127.0.0.1');
 	const remotePort = config.get<number>('remoteProxyPort', 7890);
@@ -233,9 +233,9 @@ async function activateRemote(context: vscode.ExtensionContext) {
 	// Watch config changes
 	context.subscriptions.push(
 		vscode.workspace.onDidChangeConfiguration(async (e: vscode.ConfigurationChangeEvent) => {
-			if (e.affectsConfiguration('antigravity-proxy.remoteProxyHost') ||
-				e.affectsConfiguration('antigravity-proxy.remoteProxyPort')) {
-				const cfg = vscode.workspace.getConfiguration('antigravity-proxy');
+			if (e.affectsConfiguration('antigravity-interface.remoteProxyHost') ||
+				e.affectsConfiguration('antigravity-interface.remoteProxyPort')) {
+				const cfg = vscode.workspace.getConfiguration('antigravity-interface');
 				const host = cfg.get<string>('remoteProxyHost', '127.0.0.1');
 				const port = cfg.get<number>('remoteProxyPort', 7890);
 				debug(`Config changed, re-running setup: ${host}:${port}`);
@@ -246,7 +246,7 @@ async function activateRemote(context: vscode.ExtensionContext) {
 
 	// Remote commands
 	context.subscriptions.push(
-		vscode.commands.registerCommand('antigravity-proxy.setup', () => {
+		vscode.commands.registerCommand('antigravity-interface.setup', () => {
 			const terminal = vscode.window.createTerminal('Antigravity Setup');
 			terminal.show();
 			const script = generateSetupScript(remoteHost, remotePort, extensionPath);
@@ -254,13 +254,13 @@ async function activateRemote(context: vscode.ExtensionContext) {
 			terminal.sendText('bash /tmp/ag_setup.sh');
 		}),
 
-		vscode.commands.registerCommand('antigravity-proxy.rollback', () => {
+		vscode.commands.registerCommand('antigravity-interface.rollback', () => {
 			const terminal = vscode.window.createTerminal('Antigravity Rollback');
 			terminal.show();
 			terminal.sendText(generateRollbackScript());
 		}),
 
-		vscode.commands.registerCommand('antigravity-proxy.checkProxy', async () => {
+		vscode.commands.registerCommand('antigravity-interface.checkProxy', async () => {
 			const ok = await checkPortAvailable(remoteHost, remotePort);
 			vscode.window.showInformationMessage(ok ? `Proxy OK` : `Proxy NOT reachable`);
 		})

@@ -26,12 +26,12 @@ jobs:
         run: npm run package
 
       - name: Package Extension
-        run: npx -y @vscode/vsce package --out antigravity-proxy.vsix
+        run: npx -y @vscode/vsce package --out antigravity-interface.vsix
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
           draft: true
-          files: antigravity-proxy.vsix
+          files: antigravity-interface.vsix
           generate_release_notes: true

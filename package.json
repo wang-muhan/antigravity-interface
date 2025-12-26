@@ -1,5 +1,5 @@
 {
-  "name": "antigravity-proxy",
+  "name": "antigravity-interface",
   "publisher": "wang-muhan",
   "displayName": "Antigravity Interface (AGI)",
   "description": "Easily fix connectivity issues for the Antigravity remote server. This extension ensures your remote coding tools can bypass server firewalls by securely routing Antigravity's traffic through your local computer or a designated server gateway.",
@@ -7,7 +7,7 @@
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wang-muhan/antigravity-proxy"
+    "url": "https://github.com/wang-muhan/antigravity-interface"
   },
   "engines": {
     "vscode": "^1.100.0"
@@ -26,52 +26,52 @@
   "contributes": {
     "commands": [
       {
-        "command": "antigravity-proxy.setup",
-        "title": "Antigravity Proxy: Setup Remote Environment"
+        "command": "antigravity-interface.setup",
+        "title": "Antigravity Interface: Setup Remote Environment"
       },
       {
-        "command": "antigravity-proxy.rollback",
-        "title": "Antigravity Proxy: Rollback Remote Environment"
+        "command": "antigravity-interface.rollback",
+        "title": "Antigravity Interface: Rollback Remote Environment"
       },
       {
-        "command": "antigravity-proxy.enableForwarding",
-        "title": "Antigravity Proxy: Enable Port Forwarding"
+        "command": "antigravity-interface.enableForwarding",
+        "title": "Antigravity Interface: Enable Port Forwarding"
       },
       {
-        "command": "antigravity-proxy.disableForwarding",
-        "title": "Antigravity Proxy: Disable Port Forwarding"
+        "command": "antigravity-interface.disableForwarding",
+        "title": "Antigravity Interface: Disable Port Forwarding"
       },
       {
-        "command": "antigravity-proxy.tunnelStatus",
-        "title": "Antigravity Proxy: Show Status"
+        "command": "antigravity-interface.tunnelStatus",
+        "title": "Antigravity Interface: Show Status"
       },
       {
-        "command": "antigravity-proxy.checkProxy",
-        "title": "Antigravity Proxy: Check Proxy"
+        "command": "antigravity-interface.checkProxy",
+        "title": "Antigravity Interface: Check Proxy"
       }
     ],
     "configuration": {
       "title": "Antigravity Interface (AGI)",
       "properties": {
-        "antigravity-proxy.enableLocalForwarding": {
+        "antigravity-interface.enableLocalForwarding": {
           "type": "boolean",
           "default": true,
           "scope": "application",
           "description": "Use local proxy via SSH tunnel. If true, the extension will manage ~/.ssh/config.antigravity and forward the remote port to your local machine."
         },
-        "antigravity-proxy.localProxyPort": {
+        "antigravity-interface.localProxyPort": {
           "type": "number",
           "default": 7890,
           "scope": "application",
           "description": "Local proxy port on your computer (e.g., 7890 for Clash). Only used when enableLocalForwarding is true."
         },
-        "antigravity-proxy.remoteProxyHost": {
+        "antigravity-interface.remoteProxyHost": {
           "type": "string",
           "default": "127.0.0.1",
           "scope": "machine-overridable",
           "description": "The host address on the remote server where the proxy is reachable. Use 127.0.0.1 when enableLocalForwarding is true."
         },
-        "antigravity-proxy.remoteProxyPort": {
+        "antigravity-interface.remoteProxyPort": {
           "type": "number",
           "default": 7890,
           "scope": "machine-overridable",

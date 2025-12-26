@@ -5,10 +5,10 @@
 
 [English](README.md) · **简体中文**
 
-[![Version](https://img.shields.io/visual-studio-marketplace/v/wang-muhan.antigravity-proxy)](https://marketplace.visualstudio.com/items?itemName=wang-muhan.antigravity-proxy)
-[![GitHub stars](https://img.shields.io/github/stars/wang-muhan/antigravity-proxy)](https://github.com/wang-muhan/antigravity-proxy)
-[![GitHub issues](https://img.shields.io/github/issues/wang-muhan/antigravity-proxy)](https://github.com/wang-muhan/antigravity-proxy/issues)
-[![License](https://img.shields.io/github/license/wang-muhan/antigravity-proxy)](https://github.com/wang-muhan/antigravity-proxy/blob/main/LICENSE)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/wang-muhan.antigravity-interface)](https://marketplace.visualstudio.com/items?itemName=wang-muhan.antigravity-interface)
+[![GitHub stars](https://img.shields.io/github/stars/wang-muhan/antigravity-interface)](https://github.com/wang-muhan/antigravity-interface)
+[![GitHub issues](https://img.shields.io/github/issues/wang-muhan/antigravity-interface)](https://github.com/wang-muhan/antigravity-interface/issues)
+[![License](https://img.shields.io/github/license/wang-muhan/antigravity-interface)](https://github.com/wang-muhan/antigravity-interface/blob/main/LICENSE)
 
 </div>
 

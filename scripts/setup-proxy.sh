@@ -8,12 +8,12 @@ PROXY_ADDR="${PROXY_HOST}:${PROXY_PORT}"
 
 # Find extension bin dir
 EXTENSION_BIN_DIR=""
-for dir in "$HOME/.antigravity-server/extensions/"*antigravity-proxy*; do
+for dir in "$HOME/.antigravity-server/extensions/"*antigravity-interface*; do
     [ -d "$dir/resources/bin" ] && EXTENSION_BIN_DIR="$dir/resources/bin" && break
 done
 
 if [ -z "$EXTENSION_BIN_DIR" ]; then
-    echo "ERROR: antigravity-proxy extension not found"
+    echo "ERROR: antigravity-interface extension not found"
     exit 1
 fi
 
