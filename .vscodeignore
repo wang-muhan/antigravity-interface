@@ -16,3 +16,5 @@ vsc-extension-quickstart.md
 !dist/**
 !resources
 !resources/**
+!scripts
+!scripts/**

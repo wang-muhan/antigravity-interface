@@ -1,8 +1,9 @@
 #!/bin/bash
 set -e
 
-PROXY_HOST="__PROXY_HOST__"
-PROXY_PORT="__PROXY_PORT__"
+# Use environment variables with defaults (for backward compatibility with placeholders)
+PROXY_HOST="${PROXY_HOST:-__PROXY_HOST__}"
+PROXY_PORT="${PROXY_PORT:-__PROXY_PORT__}"
 PROXY_ADDR="${PROXY_HOST}:${PROXY_PORT}"
 
 # Find extension bin dir

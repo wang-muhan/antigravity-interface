@@ -55,22 +55,26 @@
         "antigravity-proxy.enableLocalForwarding": {
           "type": "boolean",
           "default": true,
-          "description": "Use local proxy via SSH tunnel (if false, use server's own proxy)"
+          "scope": "application",
+          "description": "Use local proxy via SSH tunnel. If true, the extension will manage ~/.ssh/config.antigravity and forward the remote port to your local machine."
         },
         "antigravity-proxy.localProxyPort": {
           "type": "number",
           "default": 7890,
-          "description": "Local proxy port (only used when enableLocalForwarding is true)"
+          "scope": "application",
+          "description": "Local proxy port on your computer (e.g., 7890 for Clash). Only used when enableLocalForwarding is true."
         },
         "antigravity-proxy.remoteProxyHost": {
           "type": "string",
           "default": "127.0.0.1",
-          "description": "Proxy host on remote server (only used when enableLocalForwarding is false)"
+          "scope": "machine-overridable",
+          "description": "The host address on the remote server where the proxy is reachable. Use 127.0.0.1 when enableLocalForwarding is true."
         },
         "antigravity-proxy.remoteProxyPort": {
           "type": "number",
           "default": 7890,
-          "description": "Proxy port on remote server"
+          "scope": "machine-overridable",
+          "description": "The port on the remote server that should be used as the proxy gateway."
         }
       }
     }
