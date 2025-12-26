@@ -1,4 +1,5 @@
 <div align="center">
+<img src="image.png" width="128" />
 
 # Antigravity Interface (AGI)
 
