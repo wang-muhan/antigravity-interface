@@ -1,26 +1,46 @@
-# Antigravity Proxy
+<div align="center">
+
+# Antigravity Interface (AGI)
+
+**English** · [简体中文](README.zh-CN.md)
+
+[![Version](https://img.shields.io/visual-studio-marketplace/v/wang-muhan.antigravity-proxy)](https://marketplace.visualstudio.com/items?itemName=wang-muhan.antigravity-proxy)
+[![GitHub stars](https://img.shields.io/github/stars/wang-muhan/antigravity-proxy)](https://github.com/wang-muhan/antigravity-proxy)
+[![GitHub issues](https://img.shields.io/github/issues/wang-muhan/antigravity-proxy)](https://github.com/wang-muhan/antigravity-proxy/issues)
+[![License](https://img.shields.io/github/license/wang-muhan/antigravity-proxy)](https://github.com/wang-muhan/antigravity-proxy/blob/main/LICENSE)
+
+</div>
 
 Easily fix connectivity issues for the Antigravity remote server. This extension ensures your remote coding tools can bypass server firewalls by securely routing Antigravity's traffic through your local computer or a designated server gateway.
 
+> **Note:** This version only supports **Linux remote servers**.
+
+---
+
 ## Features
 
-- **Automated Proxy Setup**: Deploy `graftcp` and configure proxies automatically.
-- **Flexible Modes**: Choose between fixed server-side proxy or SSH reverse tunnel (local forwarding).
+- **Automated Proxy Setup**: Deploys `mgraftcp` and configures proxies automatically.
+- **SSH Reverse Tunnel**: Routes traffic through your local proxy via SSH port forwarding.
 - **Process Redirection**: Automatically intercepts and redirects language server processes.
+
+## Quick Start
+
+1. Install this extension on VS Code.
+2. Configure your local proxy port in settings (e.g., Clash on port 7890).
+3. Connect to your remote Linux server via SSH.
+4. The extension will automatically set up the proxy tunnel.
+
+## Extension Settings
+
+| Setting | Description |
+|---------|-------------|
+| `enableLocalForwarding` | Enable SSH reverse tunnel forwarding. |
+| `localProxyPort` | Local proxy port on your computer. |
+| `remoteProxyHost` | Proxy host address on the remote server. |
+| `remoteProxyPort` | Proxy port on the remote server. |
 
 ## Requirements
 
 - SSH access to the remote server.
-- `graftcp` compatible environment (Linux).
-
-## Extension Settings
-
-This extension contributes the following settings:
-
-* `antigravity-proxy.proxyHost`: Proxy host address on the remote server (default: `127.0.0.1`).
-* `antigravity-proxy.proxyPort`: Proxy port on the remote server (default: `7890`).
-* `antigravity-proxy.enableLocalForwarding`: Enable SSH reverse tunnel forwarding (default: `true`).
-* `antigravity-proxy.localProxyPort`: Local machine proxy port (default: `7890`).
-
-## connect
-More info to be added.
+- Linux remote server (x86_64 or arm64).
+- A local proxy running on your computer (e.g., Clash, V2Ray).

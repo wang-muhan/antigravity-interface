@@ -1,12 +1,13 @@
 {
   "name": "antigravity-proxy",
-  "publisher": "goodl",
-  "displayName": "Antigravity Proxy",
+  "publisher": "wang-muhan",
+  "displayName": "Antigravity Interface (AGI)",
   "description": "Easily fix connectivity issues for the Antigravity remote server. This extension ensures your remote coding tools can bypass server firewalls by securely routing Antigravity's traffic through your local computer or a designated server gateway.",
+  "icon": "image.png",
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/placeholder/antigravity-proxy"
+    "url": "https://github.com/wang-muhan/antigravity-proxy"
   },
   "engines": {
     "vscode": "^1.100.0"
@@ -50,7 +51,7 @@
       }
     ],
     "configuration": {
-      "title": "Antigravity Proxy",
+      "title": "Antigravity Interface (AGI)",
       "properties": {
         "antigravity-proxy.enableLocalForwarding": {
           "type": "boolean",
