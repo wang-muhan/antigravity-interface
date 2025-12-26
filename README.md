@@ -12,7 +12,7 @@
 
 </div>
 
-Easily fix connectivity issues for the Antigravity remote server. This extension ensures your remote coding tools can bypass server firewalls by securely routing Antigravity's traffic through your local computer or a designated server gateway.
+Proxy interface for Antigravity. Bypass server firewalls by securely routing remote traffic through local or designated gateways.
 
 > **Note:** This version only supports **Linux remote servers**.
 
