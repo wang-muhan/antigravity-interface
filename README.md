@@ -26,10 +26,11 @@ Easily fix connectivity issues for the Antigravity remote server. This extension
 
 ## Quick Start
 
-1. Install this extension on VS Code.
-2. Configure your local proxy port in settings (e.g., Clash on port 7890).
-3. Connect to your remote Linux server via SSH.
-4. The extension will automatically set up the proxy tunnel.
+1. Install the **Antigravity Interface** extension on your local Antigravity.
+2. Connect to your remote Linux server using Antigravity Remote - SSH.
+3. Install the extension again **on the remote server** (found in the Extensions view under the SSH section).
+4. Execute the **Developer: Reload Window** command (or restart Antigravity) to ensure all services are properly initialized.
+5. Configure your `localProxyPort` in settings (e.g., 7890) to match your local proxy service.
 
 ## Extension Settings
 

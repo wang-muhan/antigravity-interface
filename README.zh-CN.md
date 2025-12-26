@@ -26,10 +26,11 @@
 
 ## 快速开始
 
-1. 在 VS Code 中安装此扩展。
-2. 在设置中配置本地代理端口（例如 Clash 的 7890 端口）。
-3. 通过 SSH 连接到远程 Linux 服务器。
-4. 扩展将自动设置代理隧道。
+1. 在 **本地 Antigravity** 环境中安装 "Antigravity Interface" 插件。
+2. 通过 Antigravity Remote - SSH 连接到您的远程 Linux 服务器。
+3. 在 **远程服务器** 环境中再次安装该插件（可以在插件视图的 "SSH: [服务器名]" 分类下点击安装）。
+4. 执行 **Developer: Reload Window** 命令（重新加载窗口）或重启 Antigravity，以确保代理服务正确初始化。
+5. 在设置中配置 `localProxyPort`（例如 7890）以匹配您的本地代理软件。
 
 ## 扩展设置
 
